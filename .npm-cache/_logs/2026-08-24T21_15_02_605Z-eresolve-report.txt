@@ -1,0 +1,26 @@
+'Log files:
+/Users/obiariuche/Downloads/obiariwork2026/.npm-cache/_logs/2026-08-24T21_15_02_605Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: vite_react_shadcn_ts@0.0.0
+Found: vite@8.2.2
+node_modules/vite
+  dev vite@"^8.0.10" from the root project
+  peer vite@"*" from @vitejs/devtools@0.5.2
+  node_modules/@vitejs/devtools
+    peerOptional @vitejs/devtools@"^0.4.0 || ^0.5.0" from vite@8.2.2
+  peer vite@"*" from @vitejs/devtools-vite@0.5.2
+  node_modules/@vitejs/devtools-vite
+    peerOptional @vitejs/devtools-vite@"^0.5.2" from @vitejs/devtools@0.5.2
+    node_modules/@vitejs/devtools
+      peerOptional @vitejs/devtools@"^0.4.0 || ^0.5.0" from vite@8.2.2
+
+Could not resolve dependency:
+peer vite@"^4 || ^5 || ^6 || ^7" from @vitejs/plugin-react-swc@3.11.0
+node_modules/@vitejs/plugin-react-swc
+  dev @vitejs/plugin-react-swc@"^3.11.0" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.
