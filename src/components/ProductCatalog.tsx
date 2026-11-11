@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { Lock } from "lucide-react";
+import { publicAsset } from "@/lib/utils";
 
 const transition = { duration: 0.8, ease: [0.19, 1, 0.22, 1] as const };
 const projectUnlockCode = "8187447";
@@ -16,7 +17,6 @@ interface Project {
   hideCredits?: boolean;
   teammates?: string[];
   slides?: string;
-  supplementalUrl?: string;
   publicUrl?: string;
   publicUrlLabel?: string;
   images?: { src: string; alt: string }[];
@@ -36,7 +36,6 @@ const projects: Project[] = [
     publicUrlLabel: "View prototype ↗",
     teammates: ["Alara Dinc", "Lingkai", "Kobe Ko", "Yunji Park"],
     slides: "/open-spot-design-document.pdf",
-    supplementalUrl: "/open-spot-supplemental-material.pptx",
   },
   {
     year: "2026 · Incoming",
@@ -238,6 +237,12 @@ const ProductCatalog = () => {
             whileHover={!isLocked ? { x: 10 } : undefined}
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
+            onFocusCapture={() => setHoveredIndex(i)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setHoveredIndex(null);
+              }
+            }}
             onClick={() => {
               if (isLocked) {
                 setSelectedLockedProject(project.name);
@@ -291,7 +296,7 @@ const ProductCatalog = () => {
                   {project.images.map((image) => (
                     <img
                       key={image.src}
-                      src={image.src}
+                      src={publicAsset(image.src)}
                       alt={image.alt}
                       className="w-full max-h-[360px] object-contain object-left border border-border bg-white"
                     />
@@ -327,38 +332,36 @@ const ProductCatalog = () => {
                   aria-hidden={hoveredIndex !== i}
                 >
                   <iframe
-                    src={`${project.slides}#toolbar=0&navpanes=0&view=FitH`}
+                    src={publicAsset(`${project.slides}#toolbar=0&navpanes=0&view=FitH`)}
                     title={`${project.name} design slides`}
                     className="h-[360px] w-full border border-border bg-background"
                   />
                 </motion.div>
               )}
-              {(project.publicUrl || project.supplementalUrl) && (
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-2">
-                  {project.publicUrl && (
-                    <a
-                      href={project.publicUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(event) => event.stopPropagation()}
-                      onKeyDown={(event) => event.stopPropagation()}
-                      className="font-serif-body text-base text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
-                    >
-                      {project.publicUrlLabel ?? "Learn more about the public work ↗"}
-                    </a>
-                  )}
-                  {project.supplementalUrl && (
-                    <a
-                      href={project.supplementalUrl}
-                      download
-                      onClick={(event) => event.stopPropagation()}
-                      onKeyDown={(event) => event.stopPropagation()}
-                      className="font-serif-body text-base text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
-                    >
-                      Supplemental material ↗
-                    </a>
-                  )}
-                </div>
+              {project.publicUrl && (
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: hoveredIndex === i ? 1 : 0,
+                    height: hoveredIndex === i ? "auto" : 0,
+                    marginTop: hoveredIndex === i ? 8 : 0,
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-wrap items-center gap-x-6 gap-y-2 overflow-hidden"
+                  aria-hidden={hoveredIndex !== i}
+                >
+                  <a
+                    href={project.publicUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    tabIndex={hoveredIndex === i ? 0 : -1}
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                    className="font-serif-body text-base text-muted-foreground underline underline-offset-4 transition-colors hover:text-[#E89EB8] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[#E89EB8]"
+                  >
+                    {project.publicUrlLabel ?? "View details ↗"}
+                  </a>
+                </motion.div>
               )}
               {project.teammates && (
                 <motion.p

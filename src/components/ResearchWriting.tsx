@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { publicAsset } from "@/lib/utils";
 
 const transition = { duration: 0.8, ease: [0.19, 1, 0.22, 1] as const };
 
@@ -182,7 +183,7 @@ const ResearchWriting = () => {
                   <li key={paper.title}>
                     {"url" in paper && paper.url ? (
                       <a
-                        href={paper.url}
+                        href={publicAsset(paper.url)}
                         target="_blank"
                         rel="noreferrer"
                         tabIndex={activeCollection === collection.number ? 0 : -1}
